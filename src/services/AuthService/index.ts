@@ -1,6 +1,7 @@
 "use server"
 import { FieldValues } from "react-hook-form";
 import { cookies } from "next/headers";
+import {jwtDecode} from "jwt-decode";
 export const registerUser = async( userData: FieldValues)=>{
     try{
    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/user`,{
@@ -31,7 +32,7 @@ export const loginUser = async( userData: FieldValues)=>{
     body : JSON.stringify(userData),
    });
    const result = await res.json();
-
+ console.log(result);
    if(result.success){
     (await cookies()).set("accessToken", result?.data?.accessToken)
    }
@@ -40,4 +41,18 @@ export const loginUser = async( userData: FieldValues)=>{
     }catch(error : any){
         return Error(error);
     }
+};
+export const getCurrentUser = async()=>{
+    const accessToken = (await cookies()).get("accessToken")!.value;
+    let decodedData = null;
+
+    if(accessToken) {
+        decodedData = await jwtDecode(accessToken) ;
+        return decodedData;
+
+    }else{
+        return null;
+    }
 }
+
+
