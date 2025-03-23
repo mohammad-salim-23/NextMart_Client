@@ -7,16 +7,29 @@ import { registrationSchema } from "../registerValidation";
 import Link from "next/link";
 import Logo from "@/app/assets/svgs/Logo";
 import { Button } from "@/components/ui/button";
+import { registerUser } from "@/services/AuthService";
+import { toast } from "sonner";
 
 
 const RegisterForm = ()=>{
-
-    const onSubmit : SubmitHandler<FieldValues> = (data)=>{
-        console.log(data);
+  const form = useForm({
+    resolver : zodResolver (registrationSchema)
+});
+    const { formState : {isSubmitting}} = form;
+    // isSubmitting -> loading state bujar jonno
+    const onSubmit : SubmitHandler<FieldValues> = async (data)=>{
+        try{
+         const res = await registerUser(data);
+         if(res?.success){
+          toast.success(res?.message);
+         }else{
+          toast.error(res?.message);
+         }
+        }catch(err : any){
+          console.error(err);
+        }
     }
-    const form = useForm({
-        resolver : zodResolver (registrationSchema)
-    });
+    
  const password = form.watch("password");
  const passwordConfirm = form.watch("passwordConfirm");
 
@@ -97,16 +110,10 @@ const RegisterForm = ()=>{
                 type = "submit"
                 className="mt-5 w-full"
             >
-               Register
+             {isSubmitting ? "Registering..." : "Register"}
             </Button>
   
-            {/* <Button
-              disabled={passwordConfirm && password !== passwordConfirm}
-              type="submit"
-              className="mt-5 w-full"
-            >
-              
-            </Button> */}
+            
           </form>
         </Form>
         <p className="text-sm text-gray-600 text-center my-3">
