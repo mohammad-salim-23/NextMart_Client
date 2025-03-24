@@ -20,6 +20,7 @@ export default function Navbar() {
   const {user , setIsLoading} = useUser();
   const handleLogOut = () =>{
     logout();
+    setIsLoading(true);
   }
   return (
     <header className="border-b w-full">
