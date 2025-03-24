@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { loginUser } from "@/services/AuthService";
 import { toast } from "sonner";
 import { loginSchema } from "./loginValidation";
-
+import ReCAPTCHA from "react-google-recaptcha";
 
 const LoginForm = ()=>{
   const form = useForm({
@@ -17,6 +17,10 @@ const LoginForm = ()=>{
 });
     const { formState : {isSubmitting}} = form;
     // isSubmitting -> loading state bujar jonno
+
+    const handleReCaptcha = (value: string | null)=>{
+      console.log(value);
+    }
     const onSubmit : SubmitHandler<FieldValues> = async (data)=>{
         try{
          const res = await loginUser(data);
@@ -73,6 +77,14 @@ const LoginForm = ()=>{
               )}
             />
           
+
+         <div className="flex mt-3 w-full">
+         <ReCAPTCHA
+    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_CLIENT_KEY}
+    onChange={handleReCaptcha}
+    className="mx-auto"
+  />
+         </div>
             <Button
                
                 type = "submit"
@@ -80,7 +92,7 @@ const LoginForm = ()=>{
             >
              {isSubmitting ? "Logging..." : "Login"}
             </Button>
-  
+   
             
           </form>
         </Form>
