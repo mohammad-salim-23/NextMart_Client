@@ -6,20 +6,30 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import Link from "next/link";
 import Logo from "@/app/assets/svgs/Logo";
 import { Button } from "@/components/ui/button";
-import { loginUser } from "@/services/AuthService";
+import { loginUser, reCaptchaTokenVerification } from "@/services/AuthService";
 import { toast } from "sonner";
 import { loginSchema } from "./loginValidation";
 import ReCAPTCHA from "react-google-recaptcha";
+import { useState } from "react";
 
 const LoginForm = ()=>{
+
   const form = useForm({
     resolver : zodResolver (loginSchema)
 });
     const { formState : {isSubmitting}} = form;
     // isSubmitting -> loading state bujar jonno
-
-    const handleReCaptcha = (value: string | null)=>{
-      console.log(value);
+ 
+    const [reCaptchaStatus , setReCaptchaStatus] = useState(false);
+    const handleReCaptcha = async(value: string | null)=>{
+       try{
+           const res = await reCaptchaTokenVerification(value!);
+           if(res?.success){
+             setReCaptchaStatus(true);
+           }
+       }catch(err : any){
+        console.error(err);
+       }
     }
     const onSubmit : SubmitHandler<FieldValues> = async (data)=>{
         try{
@@ -86,7 +96,7 @@ const LoginForm = ()=>{
   />
          </div>
             <Button
-               
+                disabled = {reCaptchaStatus ? false : true}
                 type = "submit"
                 className="mt-5 w-full"
             >
