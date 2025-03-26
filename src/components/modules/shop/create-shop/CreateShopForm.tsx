@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import Logo from "@/app/assets/svgs/Logo";
 import NMImageUploader from "@/components/ui/core/NMImageUploader";
 import { useState } from "react";
+import ImagePreviewer from "@/components/ui/core/ImagePreviewer";
 // import NMImageUploader from "@/components/ui/core/NMImageUploader";
 // import { useState } from "react";
 // import ImagePreviewer from "@/components/ui/core/NMImageUploader/ImagePreviewer";
@@ -23,7 +25,7 @@ import { useState } from "react";
 
 export default function CreateShopForm() {
 
-//   const [imagePreview, setImagePreview] = useState<string[] | []>([]);
+  const [imagePreview, setImagePreview] = useState<string[] | []>([]);
     const [imageFiles , setImageFiles] = useState<File[] | []>([]);
   const form = useForm();
 
@@ -235,24 +237,31 @@ export default function CreateShopForm() {
               />
             </div>
    
-     <NMImageUploader imageFiles={imageFiles}  setImageFiles={setImageFiles}/>
-            {/* {imagePreview.length > 0 ? (
-              <ImagePreviewer
-                setImageFiles={setImageFiles}
-                imagePreview={imagePreview}
-                setImagePreview={setImagePreview}
-                className="mt-8"
-              />
-            ) : (
-              <div className="mt-8">
-                {/* <NMImageUploader
-                  setImageFiles={setImageFiles}
-                  setImagePreview={setImagePreview}
-                  label="Upload Logo"
-                /> */}
-              {/* </div>
-            )}  */}
+    
+     
+       {
+        imagePreview.length>0 ? (
+             
+          <ImagePreviewer
+          setImageFiles={setImageFiles}
+          imagePreview={imagePreview}
+          setImagePreview={setImagePreview}
+          className="mt-8"
+          />
+        
+        ): (
+          <div className="mt-8">
+            <NMImageUploader
+             setImageFiles={setImageFiles}
+             setImagePreview={setImagePreview}
+
+            />
           </div>
+        )
+       }
+     </div>
+            
+          
 
           <Button type="submit" className="mt-5 w-full">
             {isSubmitting ? "Creating...." : "Create"}
