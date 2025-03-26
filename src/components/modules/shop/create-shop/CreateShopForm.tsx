@@ -26,7 +26,7 @@ import ImagePreviewer from "@/components/ui/core/ImagePreviewer";
 export default function CreateShopForm() {
 
   const [imagePreview, setImagePreview] = useState<string[] | []>([]);
-    const [imageFiles , setImageFiles] = useState<File[] | []>([]);
+  const [imageFiles , setImageFiles] = useState<File[] | []>([]);
   const form = useForm();
 
   const {
@@ -34,37 +34,20 @@ export default function CreateShopForm() {
   } = form;
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    // const servicesOffered = data?.servicesOffered
-    //   .split(",")
-    //   .map((service: string) => service.trim())
-    //   .filter((service: string) => service !== "");
+    
+      const servicesOffered = data?.servicesOffered.split(",").map((service : string)=> service.trim()).filter((service : string)=>service!=="");
 
-    // const modifiedData = {
-    //   ...data,
-    //   servicesOffered: servicesOffered,
-    //   establishedYear: Number(data?.establishedYear),
-    // };
-
-    // try {
-    //   const formData = new FormData();
-    //   formData.append("data", JSON.stringify(modifiedData));
-    //   formData.append("logo", imageFiles[0] as File);
-
-    //   const res = await createShop(formData);
-
-    //   console.log(res);
-
-    //   if (res.success) {
-    //     toast.success(res.message);
-    //   }
-    // } catch (err: any) {
-    //   console.error(err);
-    // }
-    try{
+      const modifiedData = {
+        ...data , 
+        servicesOffered : servicesOffered,
+        establishedYear: parseInt(data?.establishedYear),
+      };
+      console.log(modifiedData);
+      try {
         console.log(data);
-    }catch(err : any){
+      } catch (err : any) {
         console.error(err);
-    }
+      }
   };
 
   return (
@@ -269,5 +252,5 @@ export default function CreateShopForm() {
         </form>
       </Form>
     </div>
-  );
-}
+    );
+  }
