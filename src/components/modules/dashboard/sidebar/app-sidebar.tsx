@@ -22,12 +22,10 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { NavMain } from "./nav-main";
-
+import { NavUser } from "./nav-user";
 import Link from "next/link";
 import Logo from "@/app/assets/svgs/Logo";
-import { NavUser } from "./nav-user";
 
-// This is sample data.
 const data = {
   navMain: [
     {
@@ -55,6 +53,7 @@ const data = {
         },
       ],
     },
+
     {
       title: "Settings",
       url: "#",
@@ -67,7 +66,6 @@ const data = {
       ],
     },
   ],
-
   navSecondary: [
     {
       title: "Support",
