@@ -6,7 +6,7 @@ const roleBasedPrivateRoutes = {
     user : [/^\/user/, /^\/create-shop/],
     admin : [/^\/admin/],
 };
-const authRoutes = ["/login", "/register", "/create-shop"];
+const authRoutes = ["/login", "/register"];
 export const middleware = async(request : NextRequest)=>{
     const {pathname} = request.nextUrl;
 
