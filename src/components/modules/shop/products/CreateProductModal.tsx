@@ -17,7 +17,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { createProduct } from "@/services/Product";
 import { useState } from "react";
 import {
@@ -56,19 +55,36 @@ const CreateProductModal = () => {
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
+      const formattedData = {
+        name: data.name,
+        description: data.description,
+        price: Number(data.price),
+        stock: Number(data.stock),
+        weight: Number(data.weight),
+        category: data.category,
+        brand: data.brand,
+        availableColors: data.availableColors.split(",").map((color: any) => color.trim()),
+        keyFeatures: data.keyFeatures.split(",").map((feature: any) => feature.trim()),
+        specification: {
+          processor: data.processor,
+          ram: data.ram,
+          storage: data.storage,
+          display: data.display,
+        },
+      };
+     
       const formData = new FormData();
-      formData.append("data", JSON.stringify(data));
+      formData.append("data", JSON.stringify(formattedData));
       imageFiles.forEach((file) => formData.append("images", file));
 
       const res = await createProduct(formData);
-      console.log(res);
-
+      console.log(res.message);
       if (res?.success) {
         toast.success(res?.message);
       } else {
         toast.error(res?.message);
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
     }
   };
@@ -85,117 +101,40 @@ const CreateProductModal = () => {
 
         <FormProvider {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input type="text" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {["name", "description", "price", "stock", "weight", "category", "brand", "availableColors", "processor", "ram", "storage", "display", "keyFeatures"].map((fieldName) => (
+                <FormField
+                  key={fieldName}
+                  control={form.control}
+                  name={fieldName as keyof FieldValues}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{fieldName.replace(/([A-Z])/g, " $1").trim()}</FormLabel>
+                      <FormControl>
+                        <Input type={fieldName === "price" || fieldName === "stock" || fieldName === "weight" ? "number" : "text"} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ))}
+            </div>
 
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+            <div className="">
+              {imagePreview.length > 0 ? (
+                <ImagePreviewer
+                  setImageFiles={setImageFiles}
+                  imagePreview={imagePreview}
+                  setImagePreview={setImagePreview}
+                />
+              ) : (
+                <NMImageUploader
+                  setImageFiles={setImageFiles}
+                  setImagePreview={setImagePreview}
+                  label="Upload Images"
+                />
               )}
-            />
-
-            <FormField
-              control={form.control}
-              name="weight"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Weight</FormLabel>
-                  <FormControl>
-                    <Input type="number" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="category"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Category</FormLabel>
-                  <FormControl>
-                    <Input type="text" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="brand"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Brand</FormLabel>
-                  <FormControl>
-                    <Input type="text" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="availableColors"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Available Colors</FormLabel>
-                  <FormControl>
-                    <Input type="text" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="keyFeatures"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Key Features</FormLabel>
-                  <FormControl>
-                    <Textarea {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {imagePreview.length > 0 ? (
-              <ImagePreviewer
-                setImageFiles={setImageFiles}
-                imagePreview={imagePreview}
-                setImagePreview={setImagePreview}
-              />
-            ) : (
-              <NMImageUploader
-                setImageFiles={setImageFiles}
-                setImagePreview={setImagePreview}
-                label="Upload Images"
-              />
-            )}
+            </div>
 
             <Button type="submit" className="mt-5 w-full">
               {isSubmitting ? "Creating...." : "Create"}
