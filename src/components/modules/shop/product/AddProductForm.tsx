@@ -92,23 +92,22 @@ const { append : appendSpec , fields : specFields} = useFieldArray({
 const addSpec = ()=>{
   appendSpec({ key: "", value: ""})
 }
-  useEffect(() => {
-    const fetchData = async () => {
-      const [categoriesData, brandsData] = await Promise.all([
-        getAllCategories(),
-        getAllBrands(),
-      ]);
+  useEffect(()=>{
+    const fetchData = async()=>{
+        const [ categoriesData, brandsData] = await Promise.all([
+          getAllCategories(),
+          getAllBrands(),
+        ]);
 
-      setCategories(categoriesData?.data);
-      setBrands(brandsData?.data);
-    };
-
+        setCategories(categoriesData.data);
+        setBrands(brandsData.data);
+    }
     fetchData();
-  }, []);
+  },[]);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     
-  
+  console.log("data...",data);
     const availableColors = data.availableColors.map(
       (color: {value: string})=> color.value
     );
