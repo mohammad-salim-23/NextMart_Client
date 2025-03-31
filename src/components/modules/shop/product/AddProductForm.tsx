@@ -57,7 +57,8 @@ export default function AddProductsForm() {
       weight: "",
       availableColors: [{ value: "" }],
       keyFeatures: [{ value: "" }],
-      specification: [{ key: "", value: "" }],
+      specification: [{key: "", value: ""}]
+     
     },
   });
 
@@ -83,17 +84,14 @@ export default function AddProductsForm() {
     appendFeatures({ value: "" });
   };
 
-  const { append: appendSpec, fields: specFields } = useFieldArray({
-    control: form.control,
-    name: "specification",
-  });
 
-  const addSpec = () => {
-    appendSpec({ key: "", value: "" });
-  };
-
-  // console.log(specFields);
-
+const { append : appendSpec , fields : specFields} = useFieldArray({
+  control: form.control,
+  name: "specification",
+});
+const addSpec = ()=>{
+  appendSpec({ key: "", value: ""})
+}
   useEffect(() => {
     const fetchData = async () => {
       const [categoriesData, brandsData] = await Promise.all([
@@ -109,21 +107,23 @@ export default function AddProductsForm() {
   }, []);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    
+  
     const availableColors = data.availableColors.map(
-      (color: { value: string }) => color.value
+      (color: {value: string})=> color.value
     );
+ const keyFeatures = data.keyFeatures.map(
+  (feature: {value : string})=> feature.value
+ );
+ 
+ const specification: { [key: string] : string} = {};
 
-    const keyFeatures = data.keyFeatures.map(
-      (feature: { value: string }) => feature.value
-    );
-
-    const specification: { [key: string]: string } = {};
-    data.specification.forEach(
-      (item: { key: string; value: string }) =>
-        (specification[item.key] = item.value)
-    );
-
-    // console.log({ availableColors, keyFeatures, specification });
+ data.specification.forEach(
+  (item: { key: string ; value: string})=>(
+    specification[item.key] = item.value  )
+ )
+  
+   console.log({ availableColors, keyFeatures, specification });
 
     const modifiedData = {
       ...data,
@@ -392,35 +392,40 @@ export default function AddProductsForm() {
           <div>
             <div className="flex justify-between items-center border-t border-b py-3 my-5">
               <p className="text-primary font-bold text-xl">Specification</p>
-              <Button
-                onClick={addSpec}
-                variant="outline"
-                className="size-10"
-                type="button"
-              >
-                <Plus className="text-primary" />
-              </Button>
-            </div>
 
-            {specFields.map((specField, index) => (
-              <div
-                key={specField.id}
-                className="grid grid-cols-1 gap-4 md:grid-cols-2 my-5"
+              <Button
+               onClick = {addSpec}
+               variant="outline"
+               className="size-10"
+               type="button"
               >
-                <FormField
+                <Plus className="text-primary"/>
+              </Button>
+            
+            
+            </div>
+            {
+              specFields.map((specField , index)=>(
+                <div
+                 key={specField.id}
+                 className = "grid grid-cols-1 gap-4 md:grid-cols-2 my-5"
+                >
+                  <FormField
                   control={form.control}
-                  name={`specification.${index}.key`}
-                  render={({ field }) => (
+                  name = {`specification.${index}.key`}
+                  render ={({field})=>(
                     <FormItem>
-                      <FormLabel>Feature name {index + 1}</FormLabel>
+                      <FormLabel>
+                        Feature name {index+1}
+                      </FormLabel>
                       <FormControl>
-                        <Input {...field} value={field.value || ""} />
+                        <Input {...field} value = {field.value || ""}/>
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage/>
                     </FormItem>
                   )}
-                />
-                <FormField
+                  />
+                  <FormField
                   control={form.control}
                   name={`specification.${index}.value`}
                   render={({ field }) => (
@@ -433,8 +438,12 @@ export default function AddProductsForm() {
                     </FormItem>
                   )}
                 />
-              </div>
-            ))}
+
+                  </div>
+              ))
+            }
+
+      
           </div>
 
           <Button type="submit" className="mt-5 w-full" disabled={isSubmitting}>
