@@ -19,21 +19,23 @@ export const createProduct = async(data : FormData)=>{
         return Error(error);
     }
 }
-export const getAllProducts = async(page ?: string)=>{
-    try{
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/product?page=${page}`,
+export const getAllProducts = async (page?: string, limit?: string) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_API}/product?limit=${limit}&page=${page}`,
         {
-            next : {
-                tags: ["PRODUCT"]
-            }
+          next: {
+            tags: ["PRODUCT"],
+          },
         }
-    );
-
-    return res.json();
-    }catch(error : any){
-        return Error(error);
+      );
+      const data = await res.json();
+      return data;
+    } catch (error: any) {
+      return Error(error.message);
     }
-}
+  };
+  
 //get single product
 export const getSingleProduct = async( productId : string)=>{
     try{

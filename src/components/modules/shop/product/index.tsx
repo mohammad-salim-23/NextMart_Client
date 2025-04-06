@@ -8,10 +8,12 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { IProduct } from "@/types/product";
-
+import { Checkbox } from "@/components/ui/checkbox"
+import { useState } from "react";
 const ManageProducts = ({ products }: { products: IProduct[] }) => {
   const router = useRouter();
-
+  const [selectedIds , setSelectedIds] = useState<string[] | []>([]);
+  console.log("selectedIds", selectedIds);
   const handleView = (product: IProduct) => {
     console.log("Viewing product:", product);
   };
@@ -21,6 +23,38 @@ const ManageProducts = ({ products }: { products: IProduct[] }) => {
   };
 
   const columns: ColumnDef<IProduct>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) =>
+          {
+            if(value) {
+            setSelectedIds((prev)=> [...prev , row.original._id]);
+            }
+            else {
+              setSelectedIds(selectedIds.filter((id)=> id !== row.original._id));
+            }
+            row.toggleSelected(!!value);
+          }
+          }
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
     {
       accessorKey: "name",
       header: "Product Name",
@@ -33,24 +67,24 @@ const ManageProducts = ({ products }: { products: IProduct[] }) => {
             height={40}
             className="w-8 h-8 rounded-full"
           />
-          <span className="truncate">{row.original.name}</span>
+          <span className="truncate">{row.original?.name}</span>
         </div>
       ),
     },
     {
       accessorKey: "category",
       header: "Category",
-      cell: ({ row }) => <span>{row.original.category.name}</span>,
+      cell: ({ row }) => <span>{row.original?.category.name}</span>,
     },
     {
       accessorKey: "brand",
       header: "Brand",
-      cell: ({ row }) => <span>{row.original.brand.name}</span>,
+      cell: ({ row }) => <span>{row.original?.brand?.name}</span>,
     },
     {
       accessorKey: "stock",
       header: "Stock",
-      cell: ({ row }) => <span>{row.original.stock}</span>,
+      cell: ({ row }) => <span>{row.original?.stock}</span>,
     },
     {
       accessorKey: "price",

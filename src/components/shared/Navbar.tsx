@@ -52,38 +52,43 @@ export default function Navbar() {
             <ShoppingBag />
           </Button>
          
-         {user ? 
-         <>
-          <Link href="/create-shop
-          ">
-          <Button className="rounded-full"  variant="outline">Creatte Shop</Button></Link>
-          <DropdownMenu>
-  <DropdownMenuTrigger>
-  <Avatar>
-  <AvatarImage src="https://github.com/shadcn.png" />
-  <AvatarFallback>User</AvatarFallback>
-</Avatar>
-  </DropdownMenuTrigger>
-  <DropdownMenuContent>
-    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-    <DropdownMenuSeparator />
-    <DropdownMenuItem>Profile</DropdownMenuItem>
-    <DropdownMenuItem>Dashboard</DropdownMenuItem>
-    <DropdownMenuItem>My Shop</DropdownMenuItem>
-    <DropdownMenuSeparator />
-    <DropdownMenuItem className="bg-red-500 cursor-pointer" onClick={handleLogOut}>
-      <LogOut/>
-      <span>Log Out</span>
-    </DropdownMenuItem>
-  </DropdownMenuContent>
-</DropdownMenu>
-         </> :  <Link href="/login">
-          <Button className="rounded-full" variant="outline">
-            Login
-          </Button>
-          </Link>
-         }
-
+ {user?.email? 
+(
+  <>
+    <Link href="/create-shop">
+      <Button className="rounded-full" variant="outline">Creatte Shop</Button>
+    </Link>
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <Avatar>
+          <AvatarImage src="https://github.com/shadcn.png" />
+          <AvatarFallback>User</AvatarFallback>
+        </Avatar>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>Profile</DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href={`/${user?.role}/dashboard`}>Dashboard</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>My Shop</DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="bg-red-500 cursor-pointer" onClick={handleLogOut}>
+          <LogOut />
+          <span>Log Out</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  </>
+ ) : (
+  <Link href="/login">
+    <Button className="rounded-full" variant="outline">
+      Login
+    </Button>
+  </Link>
+ )
+ }
         </nav>
       </div>
     </header>

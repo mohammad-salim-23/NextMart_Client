@@ -2,9 +2,11 @@ import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import cupImage from "@/app/assets/cup-with-headphone.png";
 import styles from "./HeroSection.module.css";
+import NMContainer from "@/components/ui/core/NMContainer";
 export const HeroSection = ()=>{
     return(
-        <div className={`${styles.banner} container mx-auto border-2 border-white ronded-3xl mt-10`}>
+ <NMContainer>
+         <div className={`${styles.banner} container mx-auto border-2 border-white ronded-3xl mt-10`}>
             <div className="grid grid-cols-2 gap-4 items-center">
         <div className="pl-12">
           <h1 className="text-4xl font-bold leading-normal">
@@ -26,5 +28,6 @@ export const HeroSection = ()=>{
         </div>
       </div>
         </div>
+ </NMContainer>
     )
 }
