@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { addFlashSale } from "@/services/FlashSale";
 
 import { Dispatch, SetStateAction } from "react";
 
@@ -41,13 +42,19 @@ const DiscountModal = ( {selectedIds , setSelectedIds}: TModalProps) => {
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
    
-    const modiiedData = {
+    const modifiedData = {
         products : [...selectedIds],
         discountPercentage: parseFloat(data?.discountPercentage),
     };
 
     try{
-      
+      const res = await addFlashSale(modifiedData);
+      if(res.success){
+        toast.success(res.message);
+        setSelectedIds([]);
+      }else{
+        toast.error(res.message);
+      }
     }catch(err : any){
         console.error(err);
     }

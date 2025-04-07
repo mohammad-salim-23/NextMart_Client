@@ -16,6 +16,7 @@ import { logout } from "@/services/AuthService";
 import { useUser } from "@/context/UserContext";
 import { usePathname, useRouter } from "next/navigation";
 import { protectedRoutes } from "@/constants";
+import NMContainer from "../ui/core/NMContainer";
 
 export default function Navbar() {
 
@@ -31,7 +32,8 @@ export default function Navbar() {
      }
   }
   return (
-    <header className="border-b w-full">
+   <NMContainer>
+     <header className="border-b w-full">
       <div className="container flex justify-between items-center mx-auto h-16 px-3">
         <h1 className="text-2xl font-black flex items-center">
           <Logo />
@@ -92,5 +94,6 @@ export default function Navbar() {
         </nav>
       </div>
     </header>
+   </NMContainer>
   );
 }
