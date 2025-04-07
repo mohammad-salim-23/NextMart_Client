@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { IProduct } from "@/types/product";
 import { Checkbox } from "@/components/ui/checkbox"
 import { useState } from "react";
+import DiscountModal from "./DiscountModal";
 const ManageProducts = ({ products }: { products: IProduct[] }) => {
   const router = useRouter();
   const [selectedIds , setSelectedIds] = useState<string[] | []>([]);
@@ -148,6 +149,10 @@ const ManageProducts = ({ products }: { products: IProduct[] }) => {
           >
             Add Product <Plus />
           </Button>
+          <DiscountModal
+           selectedIds={selectedIds}
+            setSelectedIds={setSelectedIds}
+          />
         </div>
       </div>
       <NMTable columns={columns} data={products || []} />
