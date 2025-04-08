@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import NMContainer from "@/components/ui/core/NMContainer";
 import ProductCard from "@/components/ui/core/ProductCard";
 import { getFlashSaleProducts } from "@/services/FlashSale";
 
@@ -8,7 +9,8 @@ import Link from "next/link";
 const  FlashSale = async()=>{
     const {data : products} = await getFlashSaleProducts();
     return (
-        <div className="bg-white bg-opacity-50 py-10">
+    <NMContainer>
+          <div className="bg-white bg-opacity-50 py-10">
       <div className="container mx-auto">
         <div className="flex items-center justify-between">
           <h2 className="font-bold text-2xl">Flash Sale</h2>
@@ -26,6 +28,7 @@ const  FlashSale = async()=>{
         </div>
       </div>
     </div>
+    </NMContainer>
     )
 }
 export default FlashSale;
