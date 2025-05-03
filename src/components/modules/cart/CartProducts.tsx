@@ -1,5 +1,5 @@
 import Image from "next/image";
-import emptyCart from "@/assets/empty-cart.png";
+import emptyCart from "../../../app/assets/emptyCart.jpg";
 import { getAllProducts } from "@/services/Product";
 import { IProduct } from "@/types/product";
 import CartProductCard from "./cartProductCard";
